@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { CustomerField, CustomersTable, InvoiceForm, InvoicesTable, LatestInvoiceRaw, User, Revenue } from "./definitions";
+import { CustomerField, CustomersTable, InvoiceForm, InvoicesTable, LatestInvoiceRaw, User, Revenue, Invoice } from "./definitions";
 import { unstable_noStore as noStore } from "next/cache";
 
 import { formatCurrency } from "./utils";
@@ -14,7 +14,7 @@ export async function fetchRevenue() {
     // Don't do this in real life :)
 
     console.log("Fetching revenue data...");
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue>`SELECT * FROM revenue`;
 
@@ -160,6 +160,7 @@ export async function fetchInvoiceById(id: string) {
     return invoice[0];
   } catch (error) {
     console.error("Database Error:", error);
+    throw new Error("Failed to fetch total number of invoices.");
   }
 }
 
